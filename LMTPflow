@@ -1,0 +1,19 @@
+S: 220 mail.example.com Dovecot ready.
+C: LHLO example.com
+S: 250-mail.example.com
+   250-8BITMIME
+   250-ENHANCEDSTATUSCODES
+   250 PIPELINING
+C: MAIL FROM:<sender@example.com>
+S: 250 2.1.0 OK
+C: RCPT TO:<user@example.com>
+S: 250 2.1.5 OK
+C: DATA
+S: 354 Start input, end with <CR><LF>.<CR><LF>
+C: Subject: Test LMTP Delivery
+C: 
+C: This is a test message sent via netcat.
+C: .
+S: 250 2.0.0 <user@example.com> Delivered
+C: QUIT
+S: 221 2.0.0 Closing connection
