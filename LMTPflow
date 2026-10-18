@@ -17,3 +17,5 @@ C: .
 S: 250 2.0.0 <user@example.com> Delivered
 C: QUIT
 S: 221 2.0.0 Closing connection
+
+use crate socket-server-mocker
