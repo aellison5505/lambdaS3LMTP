@@ -1,0 +1,22 @@
+[package]
+name = "lambdaS3LMTP"
+version = "0.1.0-dev"
+edition = "2021"
+
+[dependencies]
+aws-config = "1.12.0"
+aws-sdk-s3 = "1.152.0"
+aws_lambda_events = { version = "1.0.0", default-features = false, features = ["s3"] }
+
+
+lambda_runtime = "1.0.1"
+mail-parser = "0.11.9"
+samotop = "0.13.2"
+samotop-delivery = "0.13.1"
+serde = "1.0.229"
+serde_json = "1.0.154"
+tokio = { version = "1", features = ["macros"] }
+
+[dev-dependencies]
+dotenvy = "0.15.7"
+httpmock = "0.8.3"
