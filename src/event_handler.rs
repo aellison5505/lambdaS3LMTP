@@ -1,14 +1,11 @@
+
 use crate::process_email_struct::ProcessEmail;
 use crate::s3_struct::ProcessFile;
 use aws_lambda_events::event::s3::S3Event;
 use lambda_runtime::{tracing, Error, LambdaEvent};
 
-/// This is the main body for the function.
-/// Write your code inside it.
-/// There are some code example in the following URLs:
-/// - https://github.com/awslabs/aws-lambda-rust-runtime/tree/main/examples
-/// - https://github.com/aws-samples/serverless-rust-demo/
 pub(crate) async fn function_handler(event: LambdaEvent<S3Event>) -> Result<(), Error> {
+   
     // Extract some useful information from the request
     let payload = event.payload;
     let mut i = 0;
@@ -27,11 +24,14 @@ pub(crate) async fn function_handler(event: LambdaEvent<S3Event>) -> Result<(), 
             object_key,
             bucket
         );
-        let _email = ProcessFile::new(object_key.to_string(), bucket.to_string())
+        let email = ProcessFile::new(object_key.to_string(), bucket.to_string())
             .read_s3_file()
             .await
             .expect("email read failed");
-        let (_from, _to) = ProcessEmail::new(_email).process();
+        let (from, to) = ProcessEmail::new(email.clone()).process().await;
+        let lmtp_client = crate::lmtp_struct::LmtpClient::new(from, to, email.clone());
+        lmtp_client.send().await.unwrap();
+
     }
 
     Ok(())

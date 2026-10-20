@@ -1,15 +1,22 @@
 [package]
 name = "lambdaS3LMTP"
-version = "0.1.0-dev"
+version = "0.1.0"
 edition = "2021"
 
+[profile.release]
+# Example: Prioritize faster compile times and smaller size over pure execution throughput
+opt-level = "z"
+lto = "thin"
+codegen-units = 1       # Increase parallelism to speed up compilation
+panic = "abort"
+
+
 [dependencies]
-aws-config = "1.12.0"
-aws-sdk-s3 = "1.152.0"
+aws-config = "1.13.0"
+aws-sdk-s3 = "1.153.0"
 aws_lambda_events = { version = "1.0.0", default-features = false, features = ["s3"] }
-
-
 lambda_runtime = "1.0.1"
+
 mail-parser = "0.11.9"
 samotop = "0.13.2"
 samotop-delivery = "0.13.1"

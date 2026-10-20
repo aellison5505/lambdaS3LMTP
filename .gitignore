@@ -18,6 +18,11 @@ rustc-ice-*.txt
 
 # keep sensitive information out of version control
 .env
+.env.prod
+.env.dev
+.env.prod.json
+.env.dev.json
+
 s3_event.json
 test_file.eml
 
