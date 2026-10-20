@@ -28,7 +28,9 @@ impl LmtpClient {
        let conn = c1.connect();
        let if_result = conn.send(envelope, self.raw_email.as_bytes()).await;
        match if_result {
-           Ok(_) => Ok(()),
+           Ok(_) => { 
+            println!("LMTP send successful.");
+            Ok(())},
            Err(e) => { print!("LMTP send error: {}", e);
                Err(Box::new(e))
            }
