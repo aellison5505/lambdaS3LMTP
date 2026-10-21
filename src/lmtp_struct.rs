@@ -1,6 +1,7 @@
 use samotop::mail::SmtpClient;
 use samotop::mail::{EmailAddress, Envelope};
 use samotop_delivery::Transport;
+use lambda_runtime::{tracing};
 
 pub (crate) struct LmtpClient {
     from: String,
@@ -11,7 +12,7 @@ pub (crate) struct LmtpClient {
 impl LmtpClient {
     pub(crate) fn new(from: String, to: Vec<String>, raw_email: String) -> Self {
         let client = Self { from, to, raw_email };
-        print!("Creating LmtpClient with from: {}, to: {:?}\n", client.from, client.to);
+        tracing::event!(tracing::Level::DEBUG, "Creating LmtpClient with from: {}, to: {:?}", client.from, client.to);
         client
     }
     pub async fn send(&self) -> Result<(), Box<dyn std::error::Error>> {
@@ -29,9 +30,9 @@ impl LmtpClient {
        let if_result = conn.send(envelope, self.raw_email.as_bytes()).await;
        match if_result {
            Ok(_) => { 
-            println!("LMTP send successful.");
+            tracing::event!(tracing::Level::INFO, "LMTP send successful.");
             Ok(())},
-           Err(e) => { print!("LMTP send error: {}", e);
+           Err(e) => { tracing::event!(tracing::Level::ERROR, "LMTP send error: {}", e);
                Err(Box::new(e))
            }
        }    

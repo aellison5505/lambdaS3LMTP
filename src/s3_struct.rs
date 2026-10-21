@@ -52,7 +52,7 @@ impl ProcessFile {
                     Ok(body_str) => {
                         let email_data = body_str.to_string();
                         tracing::event!(
-                            tracing::Level::INFO,
+                            tracing::Level::DEBUG,
                             "Successfully read S3 file: {:?}",
                             email_data
                         );

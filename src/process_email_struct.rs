@@ -1,5 +1,6 @@
 use mail_parser::MessageParser;
 use std::rc::Rc;
+use lambda_runtime::{tracing};
 
 #[derive(Debug)]
 pub(crate) struct ProcessEmail {
@@ -12,16 +13,16 @@ impl ProcessEmail {
     }
 
     pub async  fn process(&self) -> (String, Vec<String>) {
-        println!("Processing email: {}", self.email_data);
+        tracing::event!(tracing::Level::DEBUG, "Processing email: {}", self.email_data);
         let message: Rc<mail_parser::Message<'_>> = Rc::new(
             MessageParser::new()
                 .parse(&self.email_data)
                 .expect("Failed to parse email"),
         );
         let from: String = Self::get_from(Rc::clone(&message));
-        println!("From: {:?}", from);
+        tracing::event!(tracing::Level::INFO, "From: {:?}", from);
         let to = Self::get_to(Rc::clone(&message));
-        println!("To: {:?}", to.join(", "));
+        tracing::event!(tracing::Level::INFO, "To: {:?}", to.join(", "));
         return (from, to);
     }
 
