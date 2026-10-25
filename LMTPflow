@@ -19,3 +19,22 @@ C: QUIT
 S: 221 2.0.0 Closing connection
 
 use crate socket-server-mocker
+
+S: 220 mail.example.com ESMTP Service Ready
+C: HELO mail.eevidence.com
+S: 250 mail.example.com Hello mail.eevidence.com
+C: MAIL FROM:<info@eevidence.com>
+S: 250 OK
+C: RCPT TO:<johndoe@example.com>
+S: 250 OK
+C: DATA
+S: 354 End data with <CR><LF>.<CR><LF>
+C: Subject: Test SMTP message
+C: From: info@eevidence.com
+C: To: johndoe@example.com
+C: 
+C: Hi John, this is a test message sent via SMTP.
+C: .
+S: 250 OK Message accepted for delivery
+C: QUIT
+S: 221 Bye

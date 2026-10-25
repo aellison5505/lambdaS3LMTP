@@ -1,4 +1,4 @@
-use mail_parser::MessageParser;
+use mail_parser::{MessageParser};
 use std::rc::Rc;
 use lambda_runtime::{tracing};
 
@@ -27,41 +27,15 @@ impl ProcessEmail {
     }
 
     fn get_from(message: Rc<mail_parser::Message<'_>>) -> String {
-        let froms = message.from().unwrap().iter();
-        let mut result = Vec::new();
-
-        for addr in froms {
-            let mut full_address = String::new();
-        //    if let Some(name) = &addr.name {
-         //       full_address.push_str(name);
-         //       full_address.push(' ');
-         //   }
-            if let Some(address) = &addr.address {
-                full_address.push_str(&format!("{}", address.trim()));
-            }
-
-            result.push(full_address);
-        }
-        result.join(", ").to_string()
+        let from = message.from().and_then(|from| from.first());
+        from.and_then(|addr| addr.address()).map(|addr| addr.trim().to_string()).unwrap_or_default()
     }
 
     fn get_to(message: Rc<mail_parser::Message<'_>>) -> Vec<String> {
-        let tos = message.to().unwrap().iter();
-        let mut result = Vec::new();
-
-        for addr in tos {
-            let mut full_address = String::new();
-          //  if let Some(name) = &addr.name {
-         //       full_address.push_str(name);
-           //     full_address.push(' ');
-          //  }
-            if let Some(address) = &addr.address {
-                full_address.push_str(&format!("{}", address.trim()));
-            }
-
-            result.push(full_address);
-        }
-        result
+        let tos = message.to().unwrap();
+        let result:Vec<String> = tos.mailboxes().filter_map(|mailbox| mailbox.address().map(|addr| addr.to_string())).collect();
+       result
+      
     }
 }
 
@@ -83,10 +57,10 @@ This is the body of the email.
         let process_email = ProcessEmail::new(email_data.to_string());
         let (from, to) = process_email.process().await;
         
-        assert_eq!(from, "Sender Name <sender@example.com>");
+        assert_eq!(from, "sender@example.com");
         assert_eq!(
-            to.join(", "),
-            "Rec <recipient@example.com>, Jack <jack@example.com>"
+            to,
+            vec!["recipient@example.com".to_string(), "jack@example.com".to_string()]
         );
     }
 }

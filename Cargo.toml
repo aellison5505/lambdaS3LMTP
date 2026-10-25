@@ -13,17 +13,19 @@ panic = "abort"
 
 [dependencies]
 aws-config = "1.13.0"
-aws-sdk-s3 = "1.153.0"
-aws_lambda_events = { version = "1.0.0", default-features = false, features = ["s3"] }
-lambda_runtime = "1.0.1"
+aws-sdk-s3 = "1.155.0"
+aws_lambda_events = { version = "1.2.1", default-features = false, features = ["s3"] }
+lambda_runtime = "1.5.0"
 
-mail-parser = "0.11.9"
+mail-parser = "1.0.0"
 samotop = "0.13.2"
 samotop-delivery = "0.13.1"
 serde = "1.0.229"
 serde_json = "1.0.154"
+socket-server-mocker = "0.5.0"
 tokio = { version = "1", features = ["macros"] }
+tokio-test = "0.4.6"
 
 [dev-dependencies]
 dotenvy = "0.15.7"
-httpmock = "0.8.3"
+httpmock = "0.9.0"
