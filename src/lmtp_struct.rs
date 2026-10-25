@@ -54,7 +54,7 @@ mod tests_lmtp {
     use lambda_runtime::tracing::subscriber;
 
     use socket_server_mocker::Instruction::{
-         ReceiveMessageWithMaxSize, SendMessage, StopExchange,SendMessageDependingOnLastReceivedMessage
+         ReceiveMessageWithMaxSize, SendMessage, StopExchange
     };
     use socket_server_mocker::ServerMocker;
 
